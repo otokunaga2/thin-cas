@@ -1,0 +1,11 @@
+type: event
+url: http://example.com
+name: test event
+---  
+type: action
+url: http://example.com
+name: test event 
+---     
+type: condition
+url: http://example.com
+name: test condition

@@ -54,7 +54,7 @@ public class HttpHelper {
 			return this.result;
 	}
 	
-	public boolean parseHttpEndpoint(String url,String givenName){
+	public boolean parseHttpEndpoint(String url,String gitvenTag){
 		Document document = null;
 		try {
 			document = Jsoup.connect(url).parser(Parser.xmlParser()).get();
@@ -76,12 +76,12 @@ public class HttpHelper {
 		 */
 		Element element;
 		try{
-			element = document.getElementById(givenName);
+			element = document.getElementById(gitvenTag);
 		}catch(NullPointerException e){
 			e.printStackTrace();
 		}
 		String result = null;
-		for(Element e: document.select(givenName)){
+		for(Element e: document.select(gitvenTag)){
 			result = e.text();
 		}
 		this.result = Boolean.parseBoolean(result);

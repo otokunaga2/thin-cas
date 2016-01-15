@@ -30,6 +30,10 @@ public class Context {
 		helper = new HttpHelper();
 	}
 	
+	public Context() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * getを実行するメソッド
 	 * @throws IOException

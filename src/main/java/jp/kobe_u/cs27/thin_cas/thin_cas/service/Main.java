@@ -2,18 +2,20 @@ package jp.kobe_u.cs27.thin_cas.thin_cas.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.ObjectInputStream;
+import java.util.LinkedHashMap;
 
 import org.yaml.snakeyaml.Yaml;
-
-import javassist.Loader;
 
 public class Main {
 	static EventEvaluator eventEveluator;
 	static Rule rule;
 	public static void main(String args[]){
-		loadYaml("conf/");
+		try {
+			loadYaml("config.yml");
+		} catch (IOException e) {
+			System.out.println("Please confirm the configuration file.");
+		}
 //		Context event = new Context("testEvent","http://localhost:8080/LOCS4Beacon/api/isthere?userid=tokunaga&location=entrance");
 //		//Context condition = new Context("alwaysFalse","http://192.168.100.107:8080/eca-test-event/webapi/myresource/false");
 //		Context action = new Context("testAction","http://192.168.0.8:8080/axis2/services/MSMService/input?str=外出フラグ&operator=miku");
@@ -28,27 +30,37 @@ public class Main {
 //		eventEveluator.addRule(rule);
 //		eventEveluator.execute(1000);
 	}
-	public static void loadYaml(String filePath){
+	public static void loadYaml(String filePath) throws IOException{
+		String defaultPath="config.yml";
+		if(filePath == null){
+			filePath = defaultPath;
+		}
 		Yaml yaml = new Yaml();
 		File canpath = null;
-		try {
-			canpath = new File(filePath).getCanonicalFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		File canpathpare = canpath.getParentFile();
-		try {
-			File[] file = canpathpare.listFiles();
-			for(int i=0; i< file.length;i++){
-				
-			}
-			System.out.println(canpathpare.getCanonicalPath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		canpath = new File(filePath).getCanonicalFile();
+			  /** 複数データのロード */
+	   //   Map data= yaml.loadAs(ClassLoader.getSystemResources(canpath),Map.class);
+		 for (Object data : yaml.loadAll(ClassLoader.getSystemResourceAsStream(filePath))) {
+	           LinkedHashMap<String,String> temp = (LinkedHashMap<String, String>) data;
+			   //ObjectInputStream stream = new ObjectInputStream(null);
+//			   stream.readObject();
+	           System.out.println(temp.get("type"));
+			   switch(temp.get("type")){
+//			   	"event":
+//			   		break;
+			   case "event":
+				   Context ctx = new Context();
+				   ctx.setName(temp.get("name"));
+				   ctx.setUrl("url");
+				   ctx.setPrevContext(false);
+			    	break;
+			   	default:
+			    	 break;
+			   }
+			   
+	           //if(temp.get("type").equals("event"))
+	        }
 		
 	}
+	//private setEvent()
 }
