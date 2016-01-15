@@ -2,65 +2,73 @@ package jp.kobe_u.cs27.thin_cas.thin_cas.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.yaml.snakeyaml.Yaml;
+
+import com.google.gson.Gson;
 
 public class Main {
 	static EventEvaluator eventEveluator;
 	static Rule rule;
-	public static void main(String args[]){
+	static List<Rule> ruleList = new CopyOnWriteArrayList<Rule>();
+	static List<ContextPojo> eventList = new CopyOnWriteArrayList<ContextPojo>();
+	static List<ContextPojo> conditionList = new CopyOnWriteArrayList<ContextPojo>();
+	static List<ContextPojo> actionList = new CopyOnWriteArrayList<ContextPojo>();
+	
+	public static void main(String args[]) {
 		try {
 			loadYaml("config.yml");
 		} catch (IOException e) {
 			System.out.println("Please confirm the configuration file.");
 		}
-//		Context event = new Context("testEvent","http://localhost:8080/LOCS4Beacon/api/isthere?userid=tokunaga&location=entrance");
-//		//Context condition = new Context("alwaysFalse","http://192.168.100.107:8080/eca-test-event/webapi/myresource/false");
-//		Context action = new Context("testAction","http://192.168.0.8:8080/axis2/services/MSMService/input?str=外出フラグ&operator=miku");
-//		List<Context> actionList = new CopyOnWriteArrayList<Context>();
-//		List<Context> conditionList =new CopyOnWriteArrayList<Context>();
-//		eventEveluator = new EventEvaluator();
-//		//conditionList.add(condition);
-//		actionList.add(action);
-//		
-//		rule = new Rule(event,conditionList,actionList);
-//		
-//		eventEveluator.addRule(rule);
-//		eventEveluator.execute(1000);
 	}
-	public static void loadYaml(String filePath) throws IOException{
-		String defaultPath="config.yml";
-		if(filePath == null){
+
+	public static void loadYaml(String filePath) throws IOException {
+		String defaultPath = "config.yml";
+		if (filePath == null) {
 			filePath = defaultPath;
 		}
 		Yaml yaml = new Yaml();
 		File canpath = null;
 		canpath = new File(filePath).getCanonicalFile();
-			  /** 複数データのロード */
-	   //   Map data= yaml.loadAs(ClassLoader.getSystemResources(canpath),Map.class);
-		 for (Object data : yaml.loadAll(ClassLoader.getSystemResourceAsStream(filePath))) {
-	           LinkedHashMap<String,String> temp = (LinkedHashMap<String, String>) data;
-			   //ObjectInputStream stream = new ObjectInputStream(null);
-//			   stream.readObject();
-	           System.out.println(temp.get("type"));
-			   switch(temp.get("type")){
-//			   	"event":
-//			   		break;
-			   case "event":
-				   Context ctx = new Context();
-				   ctx.setName(temp.get("name"));
-				   ctx.setUrl("url");
-				   ctx.setPrevContext(false);
-			    	break;
-			   	default:
-			    	 break;
-			   }
-			   
-	           //if(temp.get("type").equals("event"))
-	        }
-		
+		Gson gson = new Gson();		
+		/** 複数データのロード */
+		for (Object data : yaml.loadAll(ClassLoader.getSystemResourceAsStream(filePath))) {
+			LinkedHashMap<String,String> tempMap = (LinkedHashMap<String, String>)data;
+			for (Map.Entry<String, String> e : tempMap.entrySet()) {
+				e.setValue("\""+e.getValue()+"\"");/*jsonでくるむために""で文字列をラップ*/
+			}
+			Object tempObject = tempMap.toString();
+	
+			String convertContextData = data.toString();
+			convertContextData = convertContextData.replace("=", ":");/*jsonでマッピングするために書き換え*/
+			
+			ContextPojo pojo = gson.fromJson(convertContextData, ContextPojo.class);
+			if(pojo.getType().equals("event")){
+				eventList.add(pojo);
+			}else if(pojo.getType().equals("condition")){
+				conditionList.add(pojo);
+			}else if(pojo.getType().equals("action")){
+				conditionList.add(pojo);
+			}
+		}
 	}
-	//private setEvent()
+	
+	
+	/**
+	 * event,condition,actionからECAルールを作成するメソッド
+	 * @param event
+	 * @param condition
+	 * @param action
+	 * @return
+	 */
+	private List<Rule> createRuleFromList(Context event, List<Context> condition, List<Context> action){
+		return null;
+	}
+	
 }

@@ -1,11 +1,12 @@
+---
 type: event
-url: http://example.com
-name: test event
----  
-type: action
-url: http://example.com
-name: test event 
----     
+url: "aaa"
+name: "test  event"
+---
 type: condition
-url: http://example.com
-name: test condition
+url: ""
+name: "test   condition"
+---
+type: action
+url: "http://"
+name: "test   Action"
