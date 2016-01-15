@@ -6,6 +6,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
+import jp.kobe_u.cs27.thin_cas.thin_cas.service.EventEvaluator;
+import jp.kobe_u.cs27.thin_cas.thin_cas.service.Rule;
+
 public class EventEvaluatorTest {
 	private Rule rule;
 	private Context event;
@@ -14,7 +18,7 @@ public class EventEvaluatorTest {
 	public void setUp() throws Exception {
 		evaluator = new EventEvaluator();
 		rule = new Rule();
-		event = new Context();
+		event = new Context("name","http://192.168.100.107:8080/eca-test-event/webapi/myresource/true");
 		rule.setEvent(event);
 	}
 

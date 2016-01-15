@@ -1,0 +1,12 @@
+event:
+  type: file
+  path_prefix: ./event/
+  
+condition:
+  type: file
+  path_prefix: ./condition/
+  
+action:
+  type: file
+  path_prefix: ./action/
+    
