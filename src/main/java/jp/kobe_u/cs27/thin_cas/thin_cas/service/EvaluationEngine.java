@@ -5,12 +5,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventEvaluator extends TimerTask {
+public class EvaluationEngine extends TimerTask {
 
 	
 	private List<Rule> observer;
-	private static EventEvaluator self = new EventEvaluator();
-	public EventEvaluator() {
+	private static EvaluationEngine self = new EvaluationEngine();
+	public EvaluationEngine() {
 		observer = new CopyOnWriteArrayList<Rule>();
 	}
 	public void addRule(Rule e){
@@ -21,6 +21,7 @@ public class EventEvaluator extends TimerTask {
 	 */
 	public List<Rule> getCurrentObservalList(){
 		final List<Rule> copyList = observer;
+		
 		return copyList;
 	}
 	
@@ -38,7 +39,7 @@ public class EventEvaluator extends TimerTask {
 			boolean result = judgeContext(event,currentResult,previousContext);
 			if(result){
 				System.out.println("event & condition satisfied");
-				e.update(e);/**/
+				e.update(e);
 			}
 		}
 	}

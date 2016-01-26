@@ -1,12 +1,12 @@
 ---
 type: event
-url: "aaa"
+url: http://192.168.100.107:8080/eca-test-event/webapi/myresource/true
 name: "test  event"
 ---
 type: condition
-url: ""
-name: "test   condition"
+url: http://192.168.100.107:8080/eca-test-event/webapi/myresource/true
+name: "test condition"
 ---
 type: action
-url: "http://"
+url: "http://192.168.100.107:8080/eca-test-event/webapi/myresource/fired"
 name: "test   Action"
