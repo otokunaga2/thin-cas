@@ -12,7 +12,7 @@ public class ContextDAOTest {
 	private ContextDAO ctxDAO;
 	@Before
 	public void setUp() throws Exception {
-		ctxDAO = new ContextDAO();
+		ctxDAO = ContextDAO.getInstance();
 	}
 
 	@After
@@ -38,6 +38,7 @@ public class ContextDAOTest {
 	public void testSave() {
 		ContextPojo pojo = new ContextPojo("event", "http://example.com", "event");
 		String result = ctxDAO.save(pojo);
+		System.out.println(result);
 		assertNotNull(result);
 	}
 

@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.util.HttpHelper;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import jp.kobe_u.cs27.thin_cas.thin_cas.util.HttpHelper;
+@XmlRootElement
 public class Rule implements Observer {
 	private String name;
 	private Context event;

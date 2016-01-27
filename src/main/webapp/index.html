@@ -1,0 +1,80 @@
+<html>
+<body>
+    <h2>Jersey RESTful Web Application!</h2>
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <p><a href="webapi/myresource">Jersey resource</a>
+    <p>Visit <a href="http://jersey.java.net">Project Jersey website</a>
+    <link rel="icon" href="../../favicon.ico">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <!--  cors filter 対策 -->
+	  <script type="text/javascript" src="./js/jquery.xdomainajax.js"></script>
+	<script type="text/javascript">
+	$(function(){
+        $("#response").html("Response Values");
+
+        $("#button").click( function(){
+            var url = $("#url_post").val();
+
+                var JSONdata = {
+                	type: $("#type").val(),
+                    url: $("#url_post").val(),
+                    name: $("#name").val(),
+                    
+                };
+
+            alert(JSON.stringify(JSONdata));
+
+            $.ajax({
+                type : 'post',
+                url : url,
+                data : JSON.stringify(JSONdata),
+                contentType: 'application/json',
+                dataType : 'JSON',
+                scriptCharset: 'utf-8',
+                success : function(data) {
+
+                    // Success
+                    alert("success");
+                    alert(JSON.stringify(data));
+                    $("#response").html(JSON.stringify(data));
+                },
+                error : function(data) {
+
+                    // Error
+                    alert("error");
+                    alert(JSON.stringify(data));
+                    $("#response").html(JSON.stringify(data));
+                }
+            });
+        })
+    })
+	
+	
+	
+	</script>
+    <title> create new simple eca</title>
+    for more information on Jersey!
+    <h1> event</h1>
+	<p>URL: <input type="text" id="url_post" name="url" size="100" value="http://192.168.100.107:8080/thin-cas/webapi/context"></p>
+    <p>value1: <input type="text" id="type" size="30" value="event"></p>
+    <p>value2: <input type="text" id="name" size="30" value="text context"></p>
+    <p><button id="button" type="button">submit</button></p>
+    
+    <!--  <h1>condition</h1>
+    <p>URL: <input type="text" id="url_post" name="url" size="100" value="http://192.168.100.107:8080/thin-cas/webapi/context"></p>
+    <p>value1: <input type="text" class="condition" id="c_type" size="30" value="condition"></p>
+    <p>value2: <input type="text" class="condition" id="c_name" size="30" value="text context"></p>
+    <p><button id="button" type="button">submit</button></p>
+  
+  	<h1>action</h1>
+    <p>URL: <input type="text" id="url_post" name="url" size="100" value="http://192.168.100.107:8080/thin-cas/webapi/context"></p>
+    <p>value1: <input type="text" class="action" id="a_type" size="30" value="action"></p>
+    <p>value2: <input type="text" class="action" id="a_name" size="30" value="text context"></p>
+    <p><button id="button" type="button">submit</button></p>-->
+  
+  
+</body>
+</html>

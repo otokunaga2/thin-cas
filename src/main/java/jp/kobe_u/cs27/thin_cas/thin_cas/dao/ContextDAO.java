@@ -4,16 +4,21 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
-
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.ContextPojo;
 
 public class ContextDAO {
 	private static final String ID_KEY = "_id"; /*ObjectIdのままだとjacksonに変換できなかったため、Stringに変換*/
 	private MorphiaUtil morphia;
 	private Datastore dataStore =null;
-	public ContextDAO(){
+	private static ContextDAO self = null;
+	private ContextDAO(){
 		dataStore = MorphiaUtil.getInstance();
+	}
+	public static ContextDAO getInstance(){
+		if(self == null){
+			self = new ContextDAO();
+		}
+		return self;
 	}
 	public ContextPojo findAsContextModel(String id){
 		return dataStore.find(ContextPojo.class).field(ID_KEY).equal(id).get();

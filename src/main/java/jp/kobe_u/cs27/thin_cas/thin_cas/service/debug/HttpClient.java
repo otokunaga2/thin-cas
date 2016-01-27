@@ -19,7 +19,7 @@ import jp.kobe_u.cs27.thin_cas.thin_cas.service.ContextPojo;
 
 public class HttpClient {
 	public static void main(String[] args){
-		 executeGet();
+		// executeGet();
 		executePost();
 	}
 	
@@ -30,7 +30,7 @@ public class HttpClient {
 	        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 	        // もしくは
 	        // try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-	            HttpGet getMethod = new HttpGet("http://localhost:8080/thin-cas/webapi/eca/rule");
+	            HttpGet getMethod = new HttpGet("http://localhost:8080/thin-cas/webapi/context/action");
 
 	            try (CloseableHttpResponse response = httpClient.execute(getMethod)) {
 	                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -48,19 +48,19 @@ public class HttpClient {
 		
 	}
 	
-	private static void executePost() {
+	private static void executePost() {	
         System.out.println("===== HTTP POST Start =====");
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
         // もしくは
         // try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            HttpPost postMethod = new HttpPost("http://localhost:8080/thin-cas/webapi/condition/new");
-
+            HttpPost postMethod = new HttpPost("http://192.168.100.107:8080/thin-cas/webapi/context");
+            postMethod.setHeader("Content-Type", "application/json;odata=verbose");
             StringBuilder builder = new StringBuilder();
             Gson gson = new Gson();
             ContextPojo ctx = new ContextPojo("event", "http://example.com", "event");
             builder.append(gson.toJson(ctx));
-            System.out.println(gson.toJson(ctx));
+            //System.out.println(gson.toJson(ctx));
 
             postMethod.setEntity((HttpEntity) new StringEntity(builder.toString(),
                                                   StandardCharsets.UTF_8));
@@ -73,6 +73,7 @@ public class HttpClient {
                 }
             }
         } catch (IOException e) {
+        	System.out.println(e);
             e.printStackTrace();
         }
 

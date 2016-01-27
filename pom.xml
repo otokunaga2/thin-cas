@@ -22,6 +22,20 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+            
+            <plugin>
+    			<groupId>org.apache.tomcat.maven</groupId>
+    			<artifactId>tomcat7-maven-plugin</artifactId>
+    			<version>2.2</version>
+    			<configuration>
+      			<path>/${project.build.finalName}</path>
+      			<server>tomcat-cloudstack</server>
+      			<url>http://192.168.100.107:8080/manager/text</url>
+      			<username>tomcat</username>
+      			<password>tomcat</password>
+    			</configuration>
+  			</plugin>
+            
         </plugins>
     </build>
 
@@ -45,9 +59,27 @@
             <!-- artifactId>jersey-container-servlet</artifactId -->
         </dependency>
         
+        
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+        
+        
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-moxy</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-processing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            
         </dependency>
         
         <dependency>

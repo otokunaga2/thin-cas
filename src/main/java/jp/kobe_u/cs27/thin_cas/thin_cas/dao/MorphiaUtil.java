@@ -19,9 +19,7 @@ public class MorphiaUtil {
 			 morphia = new Morphia();
 		 }
 		 /*モデルに利用するパッケージ名*/
-		morphia.mapPackage("jp.kobe_u.cs27.location.beacon_service.model");
 		Mapper morphiaMapper = morphia.getMapper();
-	
 		Datastore datastore = null;
 		datastore = morphia.createDatastore(new MongoClient(IPADDRESS , 27017), DATABASE);
 		return datastore;
