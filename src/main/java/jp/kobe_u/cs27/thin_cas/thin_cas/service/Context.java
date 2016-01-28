@@ -25,7 +25,8 @@ public class Context {
 	private HttpHelper helper;
 	private boolean result;
 	private final String tagName = "value";
-	public Context(String name, String url){
+	public Context(String type,String name, String url){
+		this.type= type;
 		this.name = name;
 		this.url = url;
 		this.prevContext = false;/*初期はfalseに設定*/
@@ -34,6 +35,7 @@ public class Context {
 	
 	public Context() {
 		this.prevContext = false;/*初期はfalseに設定*/
+		helper = new HttpHelper();
 	}
 
 	/**

@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -16,8 +17,9 @@ import com.google.gson.Gson;
 
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.ContextDAO;
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.RuleDAO;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.RuleModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
-import jp.kobe_u.cs27.thin_cas.thin_cas.service.ContextPojo;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.EvaluationEngine;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Rule;
 
@@ -42,6 +44,17 @@ public class HttpEndpoint {
 	}
     private Gson gson = new Gson();
 
+    @GET
+    @Path("/eca")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saveECA(@QueryParam("event") String eventId, @QueryParam("condition") String conditionId,@QueryParam("action") String actionId) {
+    	ContextPojo ctx = dao.findAsContextModel(eventId);
+    	ContextPojo condition = dao.findAsContextModel(conditionId);
+    	ContextPojo action = dao.findAsContextModel(actionId);
+    	
+        return Response.ok().build();
+    }
     
     @POST
     @Path("/context")
@@ -60,7 +73,7 @@ public class HttpEndpoint {
     public Response saveRule(Rule rule) {
     	
     	System.out.println(rule.toString());
-    	ruleDAO.save(rule);
+    	
         return Response.ok(rule).build();
     }
     
@@ -75,24 +88,19 @@ public class HttpEndpoint {
     	return "Got it!";
     }
     
-    @GET
-    @Path("/context/action")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String saveContext(ContextPojo ctx) {
-    	System.out.println(ctx.toString());
-    	dao.save(ctx);
-        return "Got it!";
-    }
-    
     
     @GET
-    @Path("/context/event")
+    @Path("/context/{param}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String saveAction(ContextPojo ctx) {
-    	engine.getCurrentObservalList();
-        return "Got it!";
+    public Response saveAction(ContextPojo ctx,@PathParam("param") String param) {
+    	List<ContextPojo> ctxPojoList = dao.findWithParam(param);
+    	/**
+    	 * todo 指定されたパラム以外,condition,action,event以外は弾く処理を追加
+    	 */
+    	String jsonResult = gson.toJson(ctxPojoList);
+    	
+        return Response.ok(jsonResult).build();
     }
     
     /**

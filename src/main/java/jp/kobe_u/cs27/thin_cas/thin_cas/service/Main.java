@@ -13,6 +13,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.google.gson.Gson;
 
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+
 public class Main {
 	static EvaluationEngine eventEveluator = new EvaluationEngine();
 	static Rule rule;

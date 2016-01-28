@@ -18,7 +18,7 @@ public class EventEvaluatorTest {
 	public void setUp() throws Exception {
 		evaluator = new EvaluationEngine();
 		rule = new Rule();
-		event = new Context("name","http://192.168.100.107:8080/eca-test-event/webapi/myresource/true");
+		event = new Context("event","name","http://192.168.100.107:8080/eca-test-event/webapi/myresource/true");
 		rule.setEvent(event);
 	}
 

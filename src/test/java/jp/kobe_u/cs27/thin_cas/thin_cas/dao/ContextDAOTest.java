@@ -2,11 +2,13 @@ package jp.kobe_u.cs27.thin_cas.thin_cas.dao;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.service.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
 
 public class ContextDAOTest {
 	private ContextDAO ctxDAO;
@@ -40,6 +42,12 @@ public class ContextDAOTest {
 		String result = ctxDAO.save(pojo);
 		System.out.println(result);
 		assertNotNull(result);
+	}
+	
+	@Test
+	public void findAsList(){
+		List<ContextPojo> givenList = ctxDAO.findAsEvent();
+		assertFalse(givenList.isEmpty());
 	}
 
 }

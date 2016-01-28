@@ -15,7 +15,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.service.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
 
 public class HttpClient {
 	public static void main(String[] args){

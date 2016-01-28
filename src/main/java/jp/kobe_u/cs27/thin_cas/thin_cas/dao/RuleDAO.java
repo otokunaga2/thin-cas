@@ -1,8 +1,10 @@
 package jp.kobe_u.cs27.thin_cas.thin_cas.dao;
 
+import java.util.List;
+
 import org.mongodb.morphia.Datastore;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.service.Rule;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.RuleModel;
 
 public class RuleDAO {
 	private static final String ID_KEY = "_id"; /*ObjectIdのままだとjacksonに変換できなかったため、Stringに変換*/
@@ -19,8 +21,18 @@ public class RuleDAO {
 		}
 		return self;
 	}
-	public String save(Rule rule){
-		dataStore.save(rule);
-		return "";
+	public String save(RuleModel ruleModel){
+		return dataStore.save(ruleModel).toString();
 	}
+	
+	public RuleModel find(String id){
+		return (RuleModel)dataStore.find(RuleModel.class);
+	}
+	
+	public List<RuleModel> getAllList(){
+		return dataStore.find(RuleModel.class).asList();
+	}
+	
+	
+	
 }

@@ -1,6 +1,4 @@
-package jp.kobe_u.cs27.thin_cas.thin_cas.service;
-
-import java.util.ArrayList;
+package jp.kobe_u.cs27.thin_cas.thin_cas.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,26 +12,28 @@ import org.mongodb.morphia.annotations.Id;
  *
  */
 @XmlRootElement
-@Entity(value="context", noClassnameStored = true/*デフォルトの設定だとクラス名が入ってしまうことを防ぐ設定*/)
+@Entity(value = "context", noClassnameStored = true/* デフォルトの設定だとクラス名が入ってしまうことを防ぐ設定 */)
 public class ContextPojo {
 	@Id
 	private String id;
-	public ContextPojo(){
-		
+
+	public ContextPojo() {
+
 	}
+
 	private String type;
 	// private ArrayList<String> url;
 	private String url;
 	private String name;
 
-public ContextPojo(String type, String url, String name) {
-	this.type = type;
-	if(isValidUrl(url)){
-		this.url =url;
+	public ContextPojo(String type, String url, String name) {
+		this.type = type;
+		if (isValidUrl(url)) {
+			this.url = url;
+		}
+
+		this.name = name;
 	}
-	
-	this.name = name;
-}
 
 	public String getType() {
 		return type;
@@ -65,7 +65,7 @@ public ContextPojo(String type, String url, String name) {
 	 * @return
 	 */
 	private boolean isValidUrl(String givenUrl) {
-		
+		String regexp = "http://";
 		return true;
 	}
 }
