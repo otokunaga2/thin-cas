@@ -2,11 +2,14 @@ package jp.kobe_u.cs27.thin_cas.thin_cas.dao;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import com.mongodb.WriteResult;
+
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 
 public class ContextDAO {
 	private static final String ID_KEY = "_id"; /*ObjectIdのままだとjacksonに変換できなかったため、Stringに変換*/
@@ -22,35 +25,47 @@ public class ContextDAO {
 		}
 		return self;
 	}
-	public ContextPojo findAsContextModel(String id){
-		return dataStore.find(ContextPojo.class).field(ID_KEY).equal(id).get();
+	public ContextModel findAsContextModel(String id){
+		ObjectId oid;
+		try{
+			oid = new ObjectId(id);
+		}catch(IllegalArgumentException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+		return dataStore.find(ContextModel.class).field(ID_KEY).equal(oid).get();
 	}
 	
-	public List<ContextPojo> findAsEvent(){
-		return dataStore.find(ContextPojo.class).field("type").equal("event").asList();
+	
+	public List<ContextModel> findWithParam(final String param){
+		
+		return dataStore.find(ContextModel.class).field("type").equal(param).asList();
 	}
 	
-	public List<ContextPojo> findWithParam(final String param){
-		return dataStore.find(ContextPojo.class).field("type").equal(param).asList();
-	}
 	
-	public List<ContextPojo> findAsAction(){
-		return dataStore.find(ContextPojo.class).field("type").equal("action").asList();
-	}
 	
-	public ContextPojo updateContext(String id, ContextPojo pojo){
-		Query<ContextPojo> updateQuery = dataStore.createQuery(ContextPojo.class).field(ID_KEY).equal(id);
+
+	
+	public ContextModel updateContext(String id, ContextModel pojo){
+		Query<ContextModel> updateQuery = dataStore.createQuery(ContextModel.class).field(ID_KEY).equal(id);
 		
 		
 		return null;
 	}
-	public String delete(ContextPojo ctx){
-		return "deletedId";
+	public boolean delete(String id){
+		ObjectId oid = convertToObjectId(id);
+		WriteResult result = dataStore.delete(dataStore.createQuery(ContextModel.class).field(ID_KEY).equal(oid));
+		return result.isUpdateOfExisting();
 	}
 	
-	public String save(ContextPojo ctx){
-		Key<ContextPojo> key = dataStore.save(ctx);
+	public String save(ContextModel ctx){
+		Key<ContextModel> key = dataStore.save(ctx);
 		return (String)key.getId();
+	}
+	private ObjectId convertToObjectId(String id){
+		ObjectId oid = new ObjectId(id);
+		return oid;
 	}
 	
 }

@@ -1,10 +1,10 @@
-package jp.kobe_u.cs27.thin_cas.thin_cas.helper;
+package jp.kobe_u.cs27.thin_cas.thin_cas.facade;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.ContextDAO;
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
 
 public class ContextFacade {
@@ -18,7 +18,7 @@ public class ContextFacade {
 	 * @return
 	 */
 	public Context getContext(String id){
-		ContextPojo pojo = contextDAO.findAsContextModel(id);
+		ContextModel pojo = contextDAO.findAsContextModel(id);
 		if(pojo == null){
 			return null;
 		}
@@ -30,14 +30,14 @@ public class ContextFacade {
 	 * @param pojo
 	 * @return
 	 */
-	public Context convertContext(ContextPojo pojo){
+	public Context convertContext(ContextModel pojo){
 		Context ctx = new Context(pojo.getType(),pojo.getName(),pojo.getUrl());
 		return ctx;
 	}
 	
-	public List<Context> convertAsListFromData(List<ContextPojo> modelList){
+	public List<Context> convertAsListFromData(List<ContextModel> modelList){
 		List<Context> contextList = new CopyOnWriteArrayList<>();
-		for(ContextPojo tempModel:modelList){
+		for(ContextModel tempModel:modelList){
 			Context ctx = convertContext(tempModel);
 			contextList.add(ctx);
 		}

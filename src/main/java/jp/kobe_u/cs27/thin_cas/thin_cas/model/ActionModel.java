@@ -12,22 +12,22 @@ import org.mongodb.morphia.annotations.Id;
  *
  */
 @XmlRootElement
-@Entity(value = "context", noClassnameStored = true/* デフォルトの設定だとクラス名が入ってしまうことを防ぐ設定 */)
-public class ContextPojo {
+@Entity(value = "action", noClassnameStored = true/* デフォルトの設定だとクラス名が入ってしまうことを防ぐ設定 */)
+public class ActionModel {
 	@Id
 	private String id;
 
-	public ContextPojo() {
+	public ActionModel() {
 
 	}
 
-	private String type;
+	
 	// private ArrayList<String> url;
 	private String url;
 	private String name;
 
-	public ContextPojo(String type, String url, String name) {
-		this.type = type;
+	public ActionModel(String type, String url, String name) {
+		
 		if (isValidUrl(url)) {
 			this.url = url;
 		}
@@ -35,13 +35,6 @@ public class ContextPojo {
 		this.name = name;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 
 	public String getUrl() {
 		return url;

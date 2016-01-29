@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.model.RuleModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
 
@@ -29,12 +29,12 @@ public class RuleDAOTest {
 	public void testSave() {
 		RuleModel ruleModel = new RuleModel();
 		//Context ctx = new Context("event","test","http://example.com");
-		ContextPojo ctx = new ContextPojo("event","http://example.com","test_event");
-		List<ContextPojo> ctxList = new ArrayList<ContextPojo>();
-		List<ContextPojo> actionList = new ArrayList<ContextPojo>();
-		ContextPojo condition = new ContextPojo("condition","http://test2.com","test2");
+		ContextModel ctx = new ContextModel("event","http://example.com","test_event");
+		List<ContextModel> ctxList = new ArrayList<ContextModel>();
+		List<ContextModel> actionList = new ArrayList<ContextModel>();
+		ContextModel condition = new ContextModel("condition","http://test2.com","test2");
 		ctxList.add(condition);
-		ContextPojo action = new ContextPojo("action","http://test2.com","test3");
+		ContextModel action = new ContextModel("action","http://test2.com","test3");
 		actionList.add(action);
 		ruleModel.setEvent(ctx);
 		ruleModel.setCondition(ctxList);
@@ -46,6 +46,14 @@ public class RuleDAOTest {
 	public void testGetAllList() {
 		List<RuleModel> shouldNotEmpty = ruleDAO.getAllList();
 		assertFalse(shouldNotEmpty.isEmpty());
+		for(RuleModel rule:shouldNotEmpty){
+			ContextModel ctx = (ContextModel) rule.getAction();
+			System.out.println(ctx.getUrl());
+			assertNotNull(rule.getEvent());
+			assertFalse(rule.getCondition().isEmpty());
+		}
+		
+		
 		
 	}
 	@Test

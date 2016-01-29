@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.ContextDAO;
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.RuleDAO;
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.model.RuleModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.EvaluationEngine;
@@ -45,22 +45,40 @@ public class HttpEndpoint {
     private Gson gson = new Gson();
 
     @GET
-    @Path("/eca")
+    @Path("/eca/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveECA(@QueryParam("event") String eventId, @QueryParam("condition") String conditionId,@QueryParam("action") String actionId) {
-    	ContextPojo ctx = dao.findAsContextModel(eventId);
-    	ContextPojo condition = dao.findAsContextModel(conditionId);
-    	ContextPojo action = dao.findAsContextModel(actionId);
     	
-        return Response.ok().build();
+    	ContextModel ctx = dao.findAsContextModel(eventId);
+    	ContextModel condition = dao.findAsContextModel(conditionId);
+    	ContextModel action = dao.findAsContextModel(actionId);
+    	RuleModel rule = new RuleModel();
+    	rule.setEvent(ctx);
+    	rule.setSingleCondition(condition);
+    	rule.setSingleAction(action);
+    	String result = ruleDAO.save(rule);
+    	String jsonRes = gson.toJson(result);
+    	
+        return Response.ok(jsonRes).build();
+    }
+    
+    @GET
+    @Path("/eca/list")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getECA() {
+    	List<RuleModel> list = ruleDAO.getAllList();
+    	
+    	String jsonResult = gson.toJson(list);
+        return Response.ok(jsonResult).build();
     }
     
     @POST
     @Path("/context")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveEvent(ContextPojo ctx) {
+    public Response saveEvent(ContextModel ctx) {
     	System.out.println(ctx.toString());
     	dao.save(ctx);
         return Response.ok(ctx).build();
@@ -93,8 +111,8 @@ public class HttpEndpoint {
     @Path("/context/{param}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response saveAction(ContextPojo ctx,@PathParam("param") String param) {
-    	List<ContextPojo> ctxPojoList = dao.findWithParam(param);
+    public Response saveAction(ContextModel ctx,@PathParam("param") String param) {
+    	List<ContextModel> ctxPojoList = dao.findWithParam(param);
     	/**
     	 * todo 指定されたパラム以外,condition,action,event以外は弾く処理を追加
     	 */
@@ -104,7 +122,9 @@ public class HttpEndpoint {
     }
     
     /**
-     * 現在の登録されているルールを取得するためのAPI
+     * 現在の評価されているルールを取得するためのAPI
+     * todo 
+     * - 
      * @return
      */
     @GET
@@ -115,6 +135,8 @@ public class HttpEndpoint {
     	String jsonElement = gson.toJson(runningList);
         return jsonElement;
     }
+    
+    
     
     
     

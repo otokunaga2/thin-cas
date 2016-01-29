@@ -6,7 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.facade.ContextFacade;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
 
 public class ContextFacadeTest {
@@ -28,7 +29,7 @@ public class ContextFacadeTest {
 
 	@Test
 	public void testConvertContext() {
-		ContextPojo pojo = new ContextPojo("event","test","http://example.com");
+		ContextModel pojo = new ContextModel("event","test","http://example.com");
 		Context ctx = contextFacade.convertContext(pojo);
 		assertNotNull(ctx);
 		System.out.println(ctx.getName());

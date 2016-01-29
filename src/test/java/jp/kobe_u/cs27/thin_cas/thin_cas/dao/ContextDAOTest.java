@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 
 public class ContextDAOTest {
 	private ContextDAO ctxDAO;
@@ -23,7 +23,10 @@ public class ContextDAOTest {
 
 	@Test
 	public void testFindAsContextModel() {
-		fail("Not yet implemented");
+		ContextModel pojo = new ContextModel("event", "http://example.com", "event");
+		ContextModel shouldFound = ctxDAO.findAsContextModel("56a9d6c118365940e50f68f3");
+		
+		assertNull(shouldFound);
 	}
 
 	@Test
@@ -33,12 +36,15 @@ public class ContextDAOTest {
 
 	@Test
 	public void testDelete() {
-		fail("Not yet implemented");
+		ContextModel pojo = new ContextModel("event", "http://example.com", "event");
+		String savedId = ctxDAO.save(pojo);
+		boolean shouldExistingDeleteId = ctxDAO.delete(savedId);
+		assertTrue(shouldExistingDeleteId);
 	}
 
 	@Test
 	public void testSave() {
-		ContextPojo pojo = new ContextPojo("event", "http://example.com", "event");
+		ContextModel pojo = new ContextModel("event", "http://example.com", "event");
 		String result = ctxDAO.save(pojo);
 		System.out.println(result);
 		assertNotNull(result);
@@ -46,7 +52,7 @@ public class ContextDAOTest {
 	
 	@Test
 	public void findAsList(){
-		List<ContextPojo> givenList = ctxDAO.findAsEvent();
+		List<ContextModel> givenList = ctxDAO.findWithParam("event");
 		assertFalse(givenList.isEmpty());
 	}
 

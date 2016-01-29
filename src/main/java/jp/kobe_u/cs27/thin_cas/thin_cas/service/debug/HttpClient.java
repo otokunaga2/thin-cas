@@ -15,12 +15,12 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 
 public class HttpClient {
 	public static void main(String[] args){
-		// executeGet();
-		executePost();
+		executeGet();
+		//executePost();
 	}
 	
 	
@@ -30,7 +30,7 @@ public class HttpClient {
 	        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 	        // もしくは
 	        // try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-	            HttpGet getMethod = new HttpGet("http://localhost:8080/thin-cas/webapi/context/action");
+	            HttpGet getMethod = new HttpGet("http://192.168.100.107:8080/thin-cas/webapi/eca?event=56a9d6c118365940e50f68f3&condition=56a9de5918365940e543476c&action=56a9d6ca18365940e50f68f4");
 
 	            try (CloseableHttpResponse response = httpClient.execute(getMethod)) {
 	                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -58,7 +58,7 @@ public class HttpClient {
             postMethod.setHeader("Content-Type", "application/json;odata=verbose");
             StringBuilder builder = new StringBuilder();
             Gson gson = new Gson();
-            ContextPojo ctx = new ContextPojo("event", "http://example.com", "event");
+            ContextModel ctx = new ContextModel("event", "http://example.com", "event");
             builder.append(gson.toJson(ctx));
             //System.out.println(gson.toJson(ctx));
 

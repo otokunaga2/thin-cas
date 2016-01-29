@@ -1,9 +1,11 @@
 package jp.kobe_u.cs27.thin_cas.thin_cas.dao;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.mongodb.morphia.Datastore;
 
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.model.RuleModel;
 
 public class RuleDAO {
@@ -22,7 +24,8 @@ public class RuleDAO {
 		return self;
 	}
 	public String save(RuleModel ruleModel){
-		return dataStore.save(ruleModel).toString();
+		
+		return dataStore.save(ruleModel).getId().toString();
 	}
 	
 	public RuleModel find(String id){
@@ -30,7 +33,29 @@ public class RuleDAO {
 	}
 	
 	public List<RuleModel> getAllList(){
-		return dataStore.find(RuleModel.class).asList();
+		List<RuleModel> ruleModelList = dataStore.find(RuleModel.class).asList();
+		List<RuleModel> resultModelList = new CopyOnWriteArrayList<>();
+
+		for(RuleModel ruleModel:ruleModelList){
+			RuleModel tempRuleModel = new RuleModel();
+			List<ContextModel> tempConditionList = new CopyOnWriteArrayList<>();
+			List<ContextModel> tempActionList = new CopyOnWriteArrayList<>();
+			ContextModel event = ruleModel.getEvent();
+			tempRuleModel.setEvent(event);
+			List<ContextModel> currentContextList = ruleModel.getCondition();
+			for(ContextModel contextModel:currentContextList){
+				if("condition".equals(contextModel.getType())){
+					tempConditionList.add(contextModel);
+				}else if("action".equals(contextModel.getType())){
+					tempActionList.add(contextModel);
+				}
+			}
+			tempRuleModel.setCondition(tempConditionList);
+			tempRuleModel.setAction(tempActionList);
+			resultModelList.add(tempRuleModel);
+		}
+		
+		return resultModelList;
 	}
 	
 	

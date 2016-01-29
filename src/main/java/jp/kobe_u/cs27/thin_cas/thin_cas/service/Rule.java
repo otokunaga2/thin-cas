@@ -29,11 +29,13 @@ public class Rule implements Observer {
 	}
 	@Override
 	public void update(Rule rule) {
+		System.out.println("");
 		if(action != null)
 		{
 			if(checkCondition()){
 				for(Context acionElement: action){
 					try {
+						System.out.println("exec do get");
 						acionElement.doGET();/*getで実行する*/
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

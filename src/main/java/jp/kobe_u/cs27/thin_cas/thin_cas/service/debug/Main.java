@@ -1,4 +1,4 @@
-package jp.kobe_u.cs27.thin_cas.thin_cas.service;
+package jp.kobe_u.cs27.thin_cas.thin_cas.service.debug;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,12 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.google.gson.Gson;
 
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.facade.EndpointEngineFacade;
+import jp.kobe_u.cs27.thin_cas.thin_cas.facade.RuleDAOFacade;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
+import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
+import jp.kobe_u.cs27.thin_cas.thin_cas.service.EvaluationEngine;
+import jp.kobe_u.cs27.thin_cas.thin_cas.service.Rule;
 
 public class Main {
 	static EvaluationEngine eventEveluator = new EvaluationEngine();
@@ -24,12 +29,14 @@ public class Main {
 	static List<Context> actionList = new CopyOnWriteArrayList<>();
 
 	public static void main(String args[]) {
+		EndpointEngineFacade endpoint = new EndpointEngineFacade();
+		endpoint.executeMonitoring();
 		
-		try {
-			loadYaml("config.yml");
-		} catch (IOException e) {
-			System.out.println("Please confirm the configuration file.");
-		}
+//		try {
+//			//loadYaml("config.yml");
+//		} catch (IOException e) {
+//			System.out.println("Please confirm the configuration file.");
+//		}
 	}
 
 	@SuppressWarnings({ "unchecked", "unused" })
@@ -62,7 +69,7 @@ public class Main {
 			while(matcher.find()){
 			    matcher.group(0).replaceFirst("=", ":");/*jsonに変換するためにStirngにキャストした際に=になった箇所を:に戻す作業*/
 			}
-			ContextPojo pojo = gson.fromJson(buf.toString(), ContextPojo.class);
+			ContextModel pojo = gson.fromJson(buf.toString(), ContextModel.class);
 			Context currentCtx = convertContextFromPojo(pojo);
 			try{
 				if (currentCtx.getType().equals("event")) {
@@ -92,7 +99,7 @@ public class Main {
 		return p;
 	}
 	
-	private static Context convertContextFromPojo(ContextPojo pojo) {
+	private static Context convertContextFromPojo(ContextModel pojo) {
 		Context ctx = new Context();
 		ctx.setName(pojo.getName());
 		ctx.setPrevContext(false);

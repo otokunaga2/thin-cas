@@ -36,7 +36,7 @@ public class EvaluationEngine extends TimerTask {
 			Context event = e.getEvent();
 			boolean currentResult = event.eval();
 			boolean previousContext = event.isPrevContext();
-			boolean result = judgeContext(event,currentResult,previousContext);
+			boolean result = isEnableEvent(event,currentResult,previousContext);
 			if(result){
 				System.out.println("event & condition satisfied");
 				e.update(e);
@@ -44,8 +44,8 @@ public class EvaluationEngine extends TimerTask {
 		}
 	}
 	
-	/*should private*/
-	public boolean judgeContext(Context event, boolean currentResult, boolean previousContext) {
+	
+	public boolean isEnableEvent(Context event, boolean currentResult, boolean previousContext) {
 		event.setPrevContext(currentResult);
 		if(currentResult == true && previousContext == false){
 			return true;

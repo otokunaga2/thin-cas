@@ -14,13 +14,13 @@ public class RuleModel {
 	private String id;
 	
 	public RuleModel(){
-		this.condition = new CopyOnWriteArrayList<ContextPojo>();
-		this.action = new CopyOnWriteArrayList<ContextPojo>();
+		this.condition = new CopyOnWriteArrayList<ContextModel>();
+		this.action = new CopyOnWriteArrayList<ContextModel>();
 	}
 	private String name;
-	private ContextPojo event;
-	private List<ContextPojo> condition;
-	private List<ContextPojo> action;
+	private ContextModel event;
+	private List<ContextModel> condition;
+	private List<ContextModel> action;
 	
 	public String getName() {
 		return name;
@@ -28,24 +28,24 @@ public class RuleModel {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ContextPojo getEvent() {
+	public ContextModel getEvent() {
 		return event;
 	}
-	public void setEvent(ContextPojo event) {
+	public void setEvent(ContextModel event) {
 		this.event = event;
 	}
-	public void setSingleCondition(ContextPojo condition){
+	public void setSingleCondition(ContextModel condition){
 		this.condition.add(condition);
 	}
-	public void setSingleAction(ContextPojo action){
+	public void setSingleAction(ContextModel action){
 		this.condition.add(action);
 	}
 	
 	
-	public List<ContextPojo> getCondition() {
+	public List<ContextModel> getCondition() {
 		return condition;
 	}
-	public void setCondition(List<ContextPojo> condition) {
+	public void setCondition(List<ContextModel> condition) {
 		this.condition = condition;
 	}
 	public void setId(String id) {
@@ -55,10 +55,10 @@ public class RuleModel {
 	public String getId(){
 		return this.id;
 	}
-	public List<ContextPojo> getAction() {
+	public List<ContextModel> getAction() {
 		return action;
 	}
-	public void setAction(List<ContextPojo> action) {
+	public void setAction(List<ContextModel> action) {
 		this.action = action;
 	}
 

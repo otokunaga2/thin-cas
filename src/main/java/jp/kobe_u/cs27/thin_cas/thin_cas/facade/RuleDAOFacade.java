@@ -1,9 +1,10 @@
-package jp.kobe_u.cs27.thin_cas.thin_cas.helper;
+package jp.kobe_u.cs27.thin_cas.thin_cas.facade;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.RuleDAO;
-import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextPojo;
+import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.model.RuleModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Rule;
@@ -16,12 +17,12 @@ public class RuleDAOFacade {
 		ruleDAO = new RuleDAO();
 		contextFacade = new ContextFacade();
 	}
-	public List<Rule> createRuleFromDataSource(String id){
+	public Rule createRuleFromDataSource(String id){
 		RuleModel ruleModel = ruleDAO.find(id);
 		if(ruleModel == null){
 			return null;
 		}
-		ContextPojo contextPojo  = ruleModel.getEvent();
+		ContextModel contextPojo  = ruleModel.getEvent();
 		
 		Context ctx = contextFacade.convertContext(contextPojo);
 		
@@ -29,15 +30,16 @@ public class RuleDAOFacade {
 		
 	}
 	
-	public RuleModel saveRuleModel(ContextPojo event, ContextPojo condition, ContextPojo action){
-		
-		RuleModel ruleModel = new RuleModel();
-		ruleModel.setEvent(event);
-		ruleModel.setSingleCondition(condition);
-		ruleModel.setSingleAction(action);
-		ruleDAO.save(ruleModel);
-		return null;
+	public List<Rule> dumpAllRule(){
+		List<RuleModel> dumpList = ruleDAO.getAllList();
+		List<Rule> allRuleList = new CopyOnWriteArrayList<Rule>();
+		for(RuleModel ruleModel: dumpList){
+			Rule tempRule = convertFromRuleModel(ruleModel);
+			allRuleList.add(tempRule);
+		}
+		return allRuleList;
 	}
+	
 	private Rule convertFromRuleModel(RuleModel ruleModel){
 		Rule rule = new Rule();
 		Context event = contextFacade.convertContext(ruleModel.getEvent());
