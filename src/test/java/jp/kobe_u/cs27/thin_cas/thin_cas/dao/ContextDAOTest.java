@@ -23,23 +23,30 @@ public class ContextDAOTest {
 
 	@Test
 	public void testFindAsContextModel() {
-		ContextModel pojo = new ContextModel("event", "http://example.com", "event");
-		ContextModel shouldFound = ctxDAO.findAsContextModel("56a9d6c118365940e50f68f3");
+		ContextModel pojo = new ContextModel("event", "http://example.com", "sample event");
+		String savedId = ctxDAO.save(pojo);
+		ContextModel shouldFound = ctxDAO.findAsContextModel(savedId);
 		
-		assertNull(shouldFound);
+		assertNotNull(shouldFound);
 	}
 
 	@Test
 	public void testUpdateContext() {
-		fail("Not yet implemented");
+		ContextModel updateModel = new ContextModel("event", "http://example.com", "event");
+		String savedId = ctxDAO.save(updateModel);
+		String replacedName = "replaced event";
+		ContextModel replacedModel = new ContextModel("event","http://example.com",replacedName);
+		boolean isExstingUpdate = ctxDAO.updateContext(savedId,replacedModel);
+		assertTrue(isExstingUpdate);
 	}
 
 	@Test
 	public void testDelete() {
-		ContextModel pojo = new ContextModel("event", "http://example.com", "event");
+		ContextModel pojo = new ContextModel("event", "http://example.com", "should delete");
 		String savedId = ctxDAO.save(pojo);
 		boolean shouldExistingDeleteId = ctxDAO.delete(savedId);
-		assertTrue(shouldExistingDeleteId);
+		System.out.println();
+		assertFalse(shouldExistingDeleteId);
 	}
 
 	@Test

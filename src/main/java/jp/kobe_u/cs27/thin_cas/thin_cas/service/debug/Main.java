@@ -31,7 +31,8 @@ public class Main {
 	public static void main(String args[]) {
 		EndpointEngineFacade endpoint = new EndpointEngineFacade();
 		endpoint.executeMonitoring();
-		
+		endpoint.stoMonitoring();
+		//endpoint.stoMonitoring();
 //		try {
 //			//loadYaml("config.yml");
 //		} catch (IOException e) {

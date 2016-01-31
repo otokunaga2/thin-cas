@@ -1,6 +1,5 @@
 package jp.kobe_u.cs27.thin_cas.webapi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -17,33 +16,42 @@ import com.google.gson.Gson;
 
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.ContextDAO;
 import jp.kobe_u.cs27.thin_cas.thin_cas.dao.RuleDAO;
+import jp.kobe_u.cs27.thin_cas.thin_cas.facade.EndpointEngineFacade;
 import jp.kobe_u.cs27.thin_cas.thin_cas.model.ContextModel;
 import jp.kobe_u.cs27.thin_cas.thin_cas.model.RuleModel;
-import jp.kobe_u.cs27.thin_cas.thin_cas.service.Context;
-import jp.kobe_u.cs27.thin_cas.thin_cas.service.EvaluationEngine;
 import jp.kobe_u.cs27.thin_cas.thin_cas.service.Rule;
 
 /**
- * Root resource (exposed at "myresource" path)
+ * Root resource (exposed at "/" path)
  */
 @Path("/")
 public class HttpEndpoint {
-	private EvaluationEngine engine = new EvaluationEngine();
-	private ContextDAO dao;
-	private RuleDAO ruleDAO;
+	
+	private ContextDAO dao = ContextDAO.getInstance();
+	private RuleDAO ruleDAO = RuleDAO.getInstance();
+	private EndpointEngineFacade engineFacade = EndpointEngineFacade.getInstance();
 	public HttpEndpoint(){
-		Context event = new Context();
-		List<Context> ctxList = new ArrayList<Context>();
-		Rule rule = new Rule();
-		rule.setEvent(event);
-		rule.setCondition(ctxList);
-		rule.setAction(ctxList);
-		engine.addRule(rule);
-		dao = ContextDAO.getInstance();
-		ruleDAO = RuleDAO.getInstance();
+
 	}
     private Gson gson = new Gson();
 
+    @GET
+    @Path("/eca/start")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response startECA() {
+    	engineFacade.executeMonitoring();
+        return Response.ok("ok").build();
+    }
+    
+    @GET
+    @Path("/eca/stop")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response stopECA() {
+    	engineFacade.stoMonitoring();
+        return Response.ok("ok").build();
+    }
+    
+    
     @GET
     @Path("/eca/create")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -73,6 +81,31 @@ public class HttpEndpoint {
     	String jsonResult = gson.toJson(list);
         return Response.ok(jsonResult).build();
     }
+    
+    @GET
+    @Path("/context/search/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response finxContext(@PathParam("id") final String id) {
+    	ContextModel ctxModel = dao.findAsContextModel(id);
+        return Response.ok(ctxModel).build();
+    }
+    @POST
+    @Path("/context/update/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateContext(@PathParam("id") final String id,ContextModel model) {
+    	boolean result = dao.updateContext(id, model);
+        return Response.ok(result).build();
+    }
+    
+    @GET
+    @Path("/context/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteContext(@PathParam("id") final String id) {
+    	boolean res = dao.delete(id);
+        return Response.ok(res).build();
+    }
+    
     
     @POST
     @Path("/context")
@@ -131,7 +164,7 @@ public class HttpEndpoint {
     @Path("/eca/rule")
     @Produces(MediaType.TEXT_PLAIN)
     public String getRule() {
-    	List<?> runningList = engine.getCurrentObservalList();
+    	List<?> runningList = engineFacade.getCurrentObservalList();
     	String jsonElement = gson.toJson(runningList);
         return jsonElement;
     }

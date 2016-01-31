@@ -9,9 +9,21 @@ public class EvaluationEngine extends TimerTask {
 
 	
 	private List<Rule> observer;
-	private static EvaluationEngine self = new EvaluationEngine();
+	private static EvaluationEngine self;
+	private Timer timer = new Timer();
+	
+	
+	public static EvaluationEngine getInstance(){
+		if(self == null){
+			self = new EvaluationEngine();
+		}
+		return self;
+	}
 	public EvaluationEngine() {
-		observer = new CopyOnWriteArrayList<Rule>();
+		if(observer == null){
+			observer = new CopyOnWriteArrayList<Rule>();
+		}
+		
 	}
 	public void addRule(Rule e){
 		observer.add(e);
@@ -25,10 +37,12 @@ public class EvaluationEngine extends TimerTask {
 		return copyList;
 	}
 	
+	public void stopExecution(){
+		this.timer.cancel();
+	}
 	
 	public  void execute(long interval){
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(this, 0, interval);	
+		this.timer.scheduleAtFixedRate(this, 0, interval);
 	}
 	@Override
 	public void run() {
